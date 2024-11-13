@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  macos:
+    runs-on: macos-13
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Brew Install llvm-19
+        run: |
+          brew update
+          brew install llvm@19
+          brew install lld
+      - name: Build
+        run: ./build.sh
