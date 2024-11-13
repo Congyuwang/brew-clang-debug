@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  macos:
+    runs-on: macos-13
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Brew Install llvm-19
+        run: |
+          brew update
+          brew install llvm@19
+          brew install lld
+      - name: Build
+        run: ${HOMEBREW_PREFIX}/opt/llvm@19/bin/clang -O3 --target=arm64-apple-macosx10.14 -o main -c main.c
